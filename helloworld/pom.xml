@@ -13,4 +13,7 @@
 			<scope>provided</scope>
 		</dependency>
 	</dependencies>
+	<build>
+		<finalName>helloworld</finalName>
+	</build>
 </project>
