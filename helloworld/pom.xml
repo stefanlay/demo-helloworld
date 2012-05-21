@@ -12,6 +12,11 @@
 			<version>2.5</version>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+		  <groupId>com.sap.ui5</groupId>
+		  <artifactId>com.sap.ui5.runtime.feature</artifactId>
+		  <version>1.5.0</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<finalName>helloworld</finalName>
