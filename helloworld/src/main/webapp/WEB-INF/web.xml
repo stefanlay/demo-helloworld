@@ -5,14 +5,69 @@
 	id="WebApp_ID" version="2.5">
 	<display-name>test</display-name>
 	<welcome-file-list>
-		<welcome-file>index.html</welcome-file>
-		<welcome-file>index.htm</welcome-file>
+	  	<welcome-file>index.html</welcome-file>
+<!--   		<welcome-file>index.htm</welcome-file> 
 		<welcome-file>index.jsp</welcome-file>
-		<welcome-file>default.html</welcome-file>
+ 		<welcome-file>default.html</welcome-file>
 		<welcome-file>default.htm</welcome-file>
-		<welcome-file>default.jsp</welcome-file>
+		<welcome-file>default.jsp</welcome-file> -->
 	</welcome-file-list>
-	<servlet>
+  <!-- ============================================================== -->
+  <!-- UI5 resource servlet used to handle application resources      -->
+  <!-- ============================================================== -->
+
+  <servlet>
+    <display-name>ResourceServlet</display-name>
+    <servlet-name>ResourceServlet</servlet-name>
+    <servlet-class>com.sap.ui5.resource.ResourceServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ResourceServlet</servlet-name>
+    <url-pattern>/resources/*</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ResourceServlet</servlet-name>
+    <url-pattern>/test-resources/*</url-pattern>
+  </servlet-mapping>
+  <!-- BEGIN: DEV MODE -->
+  <context-param>
+    <param-name>com.sap.ui5.resource.DEV_MODE</param-name>
+    <param-value>true</param-value>
+  </context-param>
+  <!-- END: DEV MODE -->
+
+
+  <!-- ============================================================== -->
+  <!-- Cache Control Filter to prevent caching of any resource        -->
+  <!-- ============================================================== -->
+
+<!--   <filter>
+    <display-name>CacheControlFilter</display-name>
+    <filter-name>CacheControlFilter</filter-name>
+    <filter-class>com.sap.ui5.resource.CacheControlFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>CacheControlFilter</filter-name>
+    <url-pattern>*.html</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>CacheControlFilter</filter-name>
+    <url-pattern>*.js</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>CacheControlFilter</filter-name>
+    <url-pattern>*.xml</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>CacheControlFilter</filter-name>
+    <url-pattern>*.json</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>CacheControlFilter</filter-name>
+    <url-pattern>*.css</url-pattern>
+  </filter-mapping>  -->
+
+<!-- 	<servlet>
 		<description></description>
 		<display-name>HelloWorldServlet</display-name>
 		<servlet-name>HelloWorldServlet</servlet-name>
@@ -21,5 +76,5 @@
 	<servlet-mapping>
 		<servlet-name>HelloWorldServlet</servlet-name>
 		<url-pattern>/HelloWorldServlet</url-pattern>
-	</servlet-mapping>
+	</servlet-mapping> -->
 </web-app>
