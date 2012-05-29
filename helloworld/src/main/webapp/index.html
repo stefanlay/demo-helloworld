@@ -1,24 +1,125 @@
-<!DOCTYPE HTML>
-<html>
-       <head>
-              <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <!DOCTYPE HTML>
 
-   			  <script src="resources/sap-ui-core.js"
-                      type="text/javascript"
-                      id="sap-ui-bootstrap"
-                      data-sap-ui-libs="sap.ui.commons, sap.ui.ux3"
-                      data-sap-ui-theme="sap_goldreflection" >
-   			  </script>
-              <!-- add sap.ui.table,sap.ui.ux3 and/or other libraries to 'data-sap-ui-libs' if required -->
-
-   			  <script>
-                     sap.ui.localResources("helloworld");
-                     var view = sap.ui.view({id:"MyView1", viewName:"helloworld.MyView", type:sap.ui.core.mvc.ViewType.JS});
-   			         view.placeAt("content");
-   			  </script>
-
-       </head>
-       <body class="sapUiBody" role="application">
-              <div id="content"></div>
-       </body>
-</html>
+    <html>
+        <head>
+             <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+             <title>Tweets Persistence App</title>
+     
+             <!--
+             Load the SAP UI5 library into the memory and set some meta information for it
+    <!DOCTYPE HTML>
+    <html>
+        <head>
+             <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+             <title>Tweets Persistence App</title>
+       
+             <!--
+             Load the SAP UI5 library into the memory and set some meta information for it
+             like the libs you want to use and the theme you want to apply
+             -->
+             <script
+               src="./resources/sap-ui-core.js"
+               type="text/javascript"
+               id="sap-ui-bootstrap"
+               data-sap-ui-libs="sap.ui.ux3, sap.ui.commons, sap.ui.table"
+               data-sap-ui-theme="sap_goldreflection">
+             </script>
+           
+            <script type="text/javascript" src="tools/buildTable.js"></script>
+            
+             <script type="text/javascript">
+     
+                // Create a SAP UI5 shell element
+                var oShell = new sap.ui.ux3.Shell("tweetAppShell", {  
+                      appIcon  : "http://www.sap.com/global/images/SAPLogo.gif",
+                      appTitle : "Tweets Persistence App",
+                });
+       
+                // And now add so called WorksetItems to the shell
+                // Each WorksetItem consists in our case of a NavigationItem
+                // Notice that each Navigation Item is accessible via a unique key!
+                var WI = sap.ui.ux3.NavigationItem;
+                oShell.addWorksetItem(new WI({key : "wi_home",   text : "All Tweets"}));
+                oShell.addWorksetItem(new WI({key : "wi_tweets", text : "Tweets Per Hashtag"}));
+     
+                // Initialize the content variable
+                var aContent = {};           
+               
+                // Initialize the content for the first visible tab
+                oShell.setContent(getContent("wi_home"));
+                getTheRightModelData("wi_home");   
+     
+                // Whenever a tab is selected in the sheet, set the content accordingly
+                oShell.attachWorksetItemSelected(function(oEvent) {
+                    var itemKey = oEvent.getParameter("key");
+                    oShell.setContent(getContent(itemKey));       
+                    getTheRightModelData(itemKey);       
+                });
+     
+                // Just take the shell and place it in the html area called shellArea
+                oShell.placeAt("shellArea");
+               
+                // content generation and buffering
+                function getContent(id) {
+     
+                        if (id == "wi_home") {
+                            if (!aContent[id]){
+                                aContent[id] = [buildTable("allTweets")];
+                            }
+                        }
+                        if (id == "wi_tweets") {
+                            if (!aContent[id]){
+                                aContent[id] = [buildTable("allHashtags"), buildTable("tweetsForHashtag")];
+                            }
+                        }
+     
+                    return aContent[id];
+                }
+               
+                function getTheRightModelData(itemKey){
+                    if (itemKey == "wi_home"){
+                        var oModel  = new sap.ui.model.json.JSONModel();
+                       oModel.setData({
+                           "allTweets":
+                           [
+                           		 {"icon": "https://twimg0-a.akamaihd.net/profile_images/1370196240/b931c7e11.5868177_3_reasonably_small.jpg", "author":"zlosch2", "linkauthor":"https://twitter.com/#!/zlosch2", "tweet": "hehe", "linktweet":"https://twitter.com/zlosch2/status/185448422877302785"},
+                           		 {"icon": "http://www.gravatar.com/avatar/d9c34b054f5cdf2350c7808eed0178ca.png", "author":"stefanlay", "linkauthor":"https://twitter.com/#!/stefanlay", "tweet": "huhu", "linktweet":"https://twitter.com/stefanlay/status/197734021764087808"},
+                                 {"icon": "http://scn.sap.com/people/rui.nogueira/avatar/46.png?a=1392", "author":"ruinogueira", "linkauthor":"https://twitter.com/#!/ruinogueira", "tweet": "Just started my blog series around #SAPUI5 and #Neo http://t.co/DIwHXsu8 #innojam", "linktweet":"http://twitter.com/#!/ruinogueira/status/192606455688474624"},
+                                 {"icon": "https://twimg0-a.akamaihd.net/profile_images/1281299036/portrait_reasonably_small.jpg", "author":"steinermatt", "linkauthor":"https://twitter.com/#!/steinermatt", "tweet": "@rhirsch @simondsap oh 'they' know for sure and we are working on it - won't be long - btw, lets go for #sapnwneo as hashtag", "linktweet":"https://twitter.com/#!/ruinogueira/status/194863564442443776"},
+                                 {"icon": "http://scn.sap.com/people/rui.nogueira/avatar/46.png?a=1392", "author":"ruinogueira", "linkauthor":"https://twitter.com/#!/ruinogueira", "tweet": "Working on my second blog post around #sapnwneo and #sapui5. Hope to get it done by end of this week.", "linktweet":"https://twitter.com/#!/ruinogueira/status/194863564442443776"},
+                           ]
+                       });
+                      
+                        if (itemKey == "wi_tweets"){
+                            var oModel  = new sap.ui.model.json.JSONModel();
+                           oModel.setData({
+                               "allHashtags" :
+                               [
+                                   {"hashtag":"innojam"},
+                                   {"hashtag":"sapnwneo"},
+                                   {"hashtag":"sapui5"}
+                               ],
+                               "tweetsForHashtag" :
+                               [
+                                   {"icon": "http://scn.sap.com/people/rui.nogueira/avatar/46.png?a=1392", "author":"ruinogueira", "linkauthor":"https://twitter.com/#!/ruinogueira", "tweet": "Just started my blog series around #SAPUI5 and #Neo http://t.co/DIwHXsu8 #innojam", "linktweet":"http://twitter.com/#!/ruinogueira/status/192606455688474624"},
+                                   {"icon": "http://scn.sap.com/people/rui.nogueira/avatar/46.png?a=1392", "author":"ruinogueira", "linkauthor":"https://twitter.com/#!/ruinogueira", "tweet": "Working on my second blog post around #sapnwneo and #sapui5. Hope to get it done by end of this week.", "linktweet":"https://twitter.com/#!/ruinogueira/status/194863564442443776"},
+                               ]
+                           });
+                      
+                        }
+                      
+                       sap.ui.getCore().setModel(oModel);
+                    }
+                   
+               }
+     
+               
+             </script>
+       
+        </head>
+       
+        <body class="sapUiBody" >
+             <!-- And here is the div element shellArea where the shell element will be posted to-->
+             <div id="shellArea"></div>
+        </body>
+    </html>
